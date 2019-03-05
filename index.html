@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Tittel -->
+    <title>Mitt Spill</title>
+    
+    <!-- Styling -->
+    <link rel="stylesheet" href="styling/style.css">
+</head>
+<body>
+
+    <!--<h1>Velkommen til <i>Mea Vita</i>!</h1>
+    <p>
+        Dette er et spill.
+    </p>-->
+
+    <!-- Visningen av et nivå. Nesten alt innhold genereres dynamisk med JavaScript -->
+    <div id="levelVisning">
+        <!-- Her skal bildet vises -->
+        <div id="bildet"></div>
+
+        <!-- Vis tittel og tekst -->
+        <div id="boble">
+            <span class="gray"><span id="tittel"></span>:</span> <span id="tekst"></span>
+        </div>
+
+        <!-- Mulige valg du kan ta -->
+        <div id="muligheter"></div>
+    </div>
+
+
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="scripts/util.js"></script>
+    <script src="scripts/levels.js"></script>
+    <script src="scripts/main.js"></script>
+    
+</body>
+</html>
