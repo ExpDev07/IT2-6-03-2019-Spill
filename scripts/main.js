@@ -2,6 +2,10 @@
 // Start på -1, som er "ikke noe level"
 var currentLevel = -1;
 
+// Tid igjen for nåværende level
+var interval;
+var tidIgjen = 0;
+
 // Jquery window.onload;
 // Kalles når siden er ferdig-lastet og alle html elementer er tilgjengelige 
 $(function() {
@@ -11,6 +15,7 @@ $(function() {
     var bildet       = $('#bildet'); 
     var muligheter   = $('#muligheter');
     var tekst        = $('#tekst');
+    var tid          = $('#tid');
 
     // Vis det første levelet (går til index 0)
     nesteLevel();
@@ -48,6 +53,29 @@ $(function() {
             boks.click(() => trykkMulighet(mulighet));
         }
 
+        // For å ikke ha flere intervals på en gang, fjern den som allerede er
+        clearInterval(interval);
+
+        // Har levelet tid?
+        if (level.tid) {
+            // Sett tid-igjen til tid og oppdater tid i html
+            tidIgjen = level.tid;
+            oppdaterTid();
+
+            // Lag en interval som går en gang i sekundet (1000ms)
+            interval = setInterval(function() {
+                // Ikke noe mer tid igjen, vis feilet level
+                if (tidIgjen <= 0) {
+                    visFeiletLevel();
+                    return;
+                }
+
+                // Gå nedover med tid og oppdater tid i html
+                tidIgjen--; oppdaterTid();
+            }, 1000);
+
+        }
+
         /**
          * Kalles når en mulighet trykkes
          * 
@@ -61,12 +89,39 @@ $(function() {
             // Hvis ja, gå til neste level
             if (mulighet.riktig) nesteLevel();
             else {
-                // Vis "feilet" level og sett level til -1 sånn at
-                // vi begynner på level 0 når bruker trykker "Spill Igjen"
-                currentLevel = -1;
-                visLevel(feiletLevel);
+                // Vis feilet level
+                visFeiletLevel();
             }
         }
+    }
+
+    /**
+     * Oppdaterer tid igjen
+     */
+    function oppdaterTid() {
+        tid.text(tidIgjen);
+    }
+
+    /**
+     * Viser feilet level
+     */
+    function visFeiletLevel() {
+        // Vis "feilet" level og sett level til -1 sånn at
+        // vi begynner på level 0 når bruker trykker "Spill Igjen"
+        currentLevel = -1;
+        tidIgjen = 0;
+        visLevel(feiletLevel);
+    }
+
+    /**
+     * Viser velykket level
+     */
+    function visVelykketLevel() {
+        // Vis "velykket" level og sett level til -1 sånn at
+        // vi begynner på level 0 når bruker trykker "Spill Igjen"
+        currentLevel = -1;
+        tidIgjen = 0;
+        visLevel(velykketLevel);
     }
 
     /**
@@ -80,10 +135,8 @@ $(function() {
         // Hvis currentLevel er lik lengden på levels, da er det ingen
         // levler igjen, og brukeren har fullført spillet
         if (currentLevel >= levels.length) {
-            // Vis "velykket" level og sett level til -1 sånn at
-            // vi begynner på level 0 når bruker trykker "Spill Igjen"
-            currentLevel = -1;
-            visLevel(velykketLevel);
+            // Bruker har klart spillet, vis velykket level
+            visVelykketLevel();
         } else {
             // Vis nåværende levelet
             visLevel(levels[currentLevel]);
